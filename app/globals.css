@@ -1,0 +1,56 @@
+:root {
+  --c-deepest: #041716;
+  --c-deep: #071f20;
+  --c-forest: #0c3435;
+  --c-moss: #155052;
+  --c-jade: #4e8586;
+  --c-mist: #9bc6c7;
+  --c-paper: #e4eeee;
+
+  --font-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-en: "Jost", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--c-deepest);
+  color: var(--c-paper);
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font-en);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--c-jade);
+  color: var(--c-deepest);
+}
+
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+a,
+button {
+  font-family: inherit;
+}
+
+.jp {
+  font-family: var(--font-jp);
+}
+
+.en {
+  font-family: var(--font-en);
+}

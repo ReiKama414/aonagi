@@ -1,0 +1,362 @@
+[
+  {
+    "file": "cat/tail/cat-tail-01.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/tail/cat-tail-02.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/tail/cat-tail-03.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/walk/cat-walk-01.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/walk/cat-walk-02.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/walk/cat-walk-03.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "cat/walk/cat-walk-04.png",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "effects/falling-leaf-01.png",
+    "width": 466,
+    "height": 521,
+    "alpha": true
+  },
+  {
+    "file": "effects/falling-leaf-02.png",
+    "width": 621,
+    "height": 291,
+    "alpha": true
+  },
+  {
+    "file": "effects/falling-leaf-03.png",
+    "width": 398,
+    "height": 511,
+    "alpha": true
+  },
+  {
+    "file": "effects/falling-leaf-04.png",
+    "width": 472,
+    "height": 554,
+    "alpha": true
+  },
+  {
+    "file": "effects/falling-leaf-05.png",
+    "width": 407,
+    "height": 366,
+    "alpha": true
+  },
+  {
+    "file": "effects/fog-low.png",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "effects/light-particles.png",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "effects/moon-rays.png",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-01.png",
+    "width": 353,
+    "height": 586,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-02.png",
+    "width": 282,
+    "height": 553,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-03.png",
+    "width": 316,
+    "height": 310,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-04.png",
+    "width": 298,
+    "height": 452,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-05.png",
+    "width": 274,
+    "height": 273,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-06.png",
+    "width": 198,
+    "height": 198,
+    "alpha": true
+  },
+  {
+    "file": "effects/water-drop-07.png",
+    "width": 164,
+    "height": 241,
+    "alpha": true
+  },
+  {
+    "file": "hero/foreground.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "hero/forest-sky.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false
+  },
+  {
+    "file": "hero/hero-master.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false
+  },
+  {
+    "file": "hero/midground.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "hero/water.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "plants/bamboo-left.png",
+    "width": 1448,
+    "height": 1086,
+    "alpha": true
+  },
+  {
+    "file": "plants/bamboo-right.png",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "plants/fern-cluster.png",
+    "width": 1312,
+    "height": 1199,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/tail/cat-tail-01.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/tail/cat-tail-02.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/tail/cat-tail-03.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/walk/cat-walk-01.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/walk/cat-walk-02.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/walk/cat-walk-03.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/cat/walk/cat-walk-04.webp",
+    "width": 1440,
+    "height": 900,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/falling-leaf-01.webp",
+    "width": 466,
+    "height": 521,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/falling-leaf-02.webp",
+    "width": 621,
+    "height": 291,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/falling-leaf-03.webp",
+    "width": 398,
+    "height": 511,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/falling-leaf-04.webp",
+    "width": 472,
+    "height": 554,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/falling-leaf-05.webp",
+    "width": 407,
+    "height": 366,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/fog-low.webp",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/light-particles.webp",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/moon-rays.webp",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-01.webp",
+    "width": 353,
+    "height": 586,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-02.webp",
+    "width": 282,
+    "height": 553,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-03.webp",
+    "width": 316,
+    "height": 310,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-04.webp",
+    "width": 298,
+    "height": 452,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-05.webp",
+    "width": 274,
+    "height": 273,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-06.webp",
+    "width": 198,
+    "height": 198,
+    "alpha": true
+  },
+  {
+    "file": "webp/effects/water-drop-07.webp",
+    "width": 164,
+    "height": 241,
+    "alpha": true
+  },
+  {
+    "file": "webp/hero/foreground.webp",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "webp/hero/forest-sky.webp",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false
+  },
+  {
+    "file": "webp/hero/hero-master.webp",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false
+  },
+  {
+    "file": "webp/hero/midground.webp",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "webp/hero/water.webp",
+    "width": 1920,
+    "height": 1080,
+    "alpha": true
+  },
+  {
+    "file": "webp/plants/bamboo-left.webp",
+    "width": 1448,
+    "height": 1086,
+    "alpha": true
+  },
+  {
+    "file": "webp/plants/bamboo-right.webp",
+    "width": 1672,
+    "height": 941,
+    "alpha": true
+  },
+  {
+    "file": "webp/plants/fern-cluster.webp",
+    "width": 1312,
+    "height": 1199,
+    "alpha": true
+  }
+]

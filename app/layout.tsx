@@ -4,6 +4,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "AONAGI 青凪",
   description: "静けさは、まだ生きている — 幽靜藍綠竹林、月夜水庭與小黑貓的沉浸式視覺故事。",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Jost:wght@300;400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Noto+Serif+TC:wght@400;500&family=Jost:wght@300;400;500&display=swap"
           rel="stylesheet"
         />
       </head>

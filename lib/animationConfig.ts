@@ -29,6 +29,8 @@ export interface SceneMeta {
   kicker: string;
   title: string;
   titleSub: string;
+  /** Controls subtitle font + `lang`: latin→Jost; ja/zh→Mincho stack. */
+  titleSubLang?: "en" | "ja" | "zh-Hant";
   line1?: string;
   line1Sub?: string;
   line2?: string;
@@ -43,6 +45,7 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 01",
     title: "AONAGI",
     titleSub: "青凪",
+    titleSubLang: "ja",
   },
   {
     id: "descend",
@@ -51,6 +54,7 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 02",
     title: "水庭へ",
     titleSub: "Into the water garden",
+    titleSubLang: "en",
   },
   {
     id: "mist",
@@ -59,6 +63,7 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 03",
     title: "静けさは、まだ生きている",
     titleSub: "寂靜仍然活著",
+    titleSubLang: "zh-Hant",
   },
   {
     id: "wind",
@@ -67,6 +72,7 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 04",
     title: "風の痕跡",
     titleSub: "The trace of wind",
+    titleSubLang: "en",
   },
   {
     id: "cat",
@@ -75,6 +81,7 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 05",
     title: "水面に残る、風の記憶",
     titleSub: "留在水面的風之記憶",
+    titleSubLang: "zh-Hant",
   },
   {
     id: "moonlight",
@@ -83,14 +90,17 @@ export const SCENES: SceneMeta[] = [
     kicker: "SCENE 06",
     title: "月光",
     titleSub: "Moonlight",
+    titleSubLang: "en",
   },
   {
     id: "aonagi",
     index: 6,
-    weight: 1.2,
+    // Shorter finale beat: land on the brand frame and stop — no long empty tail.
+    weight: 0.75,
     kicker: "SCENE 07",
     title: "AONAGI",
     titleSub: "青凪",
+    titleSubLang: "ja",
     line1: "静けさは、まだ生きている",
     line2: "もう一度、青凪へ",
   },

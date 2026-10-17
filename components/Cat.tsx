@@ -1,7 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import PictureImg from "./PictureImg";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { CAT_TAIL, CAT_WALK } from "@/lib/assets";
 import { CAT } from "@/lib/animationConfig";
 
@@ -26,13 +25,20 @@ interface CatProps {
 const WALK_SEQUENCE = [0, 1, 2, 3];
 const TAIL_SEQUENCE = [0, 1, 2, 1];
 
+/**
+ * A single <picture>/<img> pair whose src is swapped imperatively, instead
+ * of 7 stacked always-mounted frames cross-faded via CSS opacity
+ * transitions. All frames are already in the browser cache (preloaded), so
+ * a src swap paints on the very next frame with nothing to fade — no
+ * simultaneous transitions to keep in sync, so no flicker window.
+ */
 const Cat = forwardRef<CatHandle, CatProps>(({ reducedMotion }, ref) => {
-  const walkRefs = useRef<(HTMLImageElement | null)[]>([]);
-  const tailRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const sourceRef = useRef<HTMLSourceElement | null>(null);
   const modeRef = useRef<CatMode>("hidden");
   const timerRef = useRef<number | null>(null);
   const walkDistanceRef = useRef(0);
-  const walkFrameIndexRef = useRef(-1);
+  const currentKeyRef = useRef<string | null>(null);
 
   const clearTimer = () => {
     if (timerRef.current !== null) {
@@ -41,29 +47,19 @@ const Cat = forwardRef<CatHandle, CatProps>(({ reducedMotion }, ref) => {
     }
   };
 
-  const showWalkFrame = (i: number) => {
-    if (walkFrameIndexRef.current === i) return;
-    walkFrameIndexRef.current = i;
-    walkRefs.current.forEach((img, idx) => {
-      if (img) img.style.opacity = idx === i ? "1" : "0";
-    });
-    tailRefs.current.forEach((img) => {
-      if (img) img.style.opacity = "0";
-    });
+  const showFrame = (key: string, src: { webp: string; png: string }) => {
+    if (currentKeyRef.current === key) return;
+    currentKeyRef.current = key;
+    if (sourceRef.current) sourceRef.current.srcset = src.webp;
+    if (imgRef.current) imgRef.current.src = src.png;
   };
 
-  const showTailFrame = (i: number) => {
-    tailRefs.current.forEach((img, idx) => {
-      if (img) img.style.opacity = idx === i ? "1" : "0";
-    });
-    walkRefs.current.forEach((img) => {
-      if (img) img.style.opacity = "0";
-    });
+  const hide = () => {
+    if (imgRef.current) imgRef.current.style.visibility = "hidden";
   };
 
-  const hideAll = () => {
-    walkRefs.current.forEach((img) => img && (img.style.opacity = "0"));
-    tailRefs.current.forEach((img) => img && (img.style.opacity = "0"));
+  const show = () => {
+    if (imgRef.current) imgRef.current.style.visibility = "visible";
   };
 
   useImperativeHandle(ref, () => ({
@@ -73,14 +69,15 @@ const Cat = forwardRef<CatHandle, CatProps>(({ reducedMotion }, ref) => {
       clearTimer();
 
       if (mode === "hidden") {
-        hideAll();
+        hide();
         return;
       }
 
+      show();
+
       if (mode === "walk") {
         walkDistanceRef.current = 0;
-        walkFrameIndexRef.current = -1;
-        showWalkFrame(WALK_SEQUENCE[0]);
+        showFrame(`walk-0`, CAT_WALK[WALK_SEQUENCE[0]]);
         return;
       }
 
@@ -88,55 +85,42 @@ const Cat = forwardRef<CatHandle, CatProps>(({ reducedMotion }, ref) => {
       // genuinely stationary, so this loop is real ambient life, not a
       // "walking in place" artifact (that only applied to the walk cycle).
       if (reducedMotion) {
-        showTailFrame(0);
+        showFrame(`tail-0`, CAT_TAIL[0]);
         return;
       }
       let i = 0;
-      showTailFrame(TAIL_SEQUENCE[0]);
+      showFrame(`tail-${TAIL_SEQUENCE[0]}`, CAT_TAIL[TAIL_SEQUENCE[0]]);
       timerRef.current = window.setInterval(() => {
         i = (i + 1) % TAIL_SEQUENCE.length;
-        showTailFrame(TAIL_SEQUENCE[i]);
+        showFrame(`tail-${TAIL_SEQUENCE[i]}`, CAT_TAIL[TAIL_SEQUENCE[i]]);
       }, CAT.tailFrameMs);
     },
     advanceWalk(distanceDeltaPercent: number) {
       if (modeRef.current !== "walk" || distanceDeltaPercent <= 0) return;
       walkDistanceRef.current += distanceDeltaPercent;
       if (reducedMotion) {
-        showWalkFrame(0);
+        showFrame(`walk-0`, CAT_WALK[WALK_SEQUENCE[0]]);
         return;
       }
       const step = Math.floor(walkDistanceRef.current / CAT.walkStepPercent);
-      showWalkFrame(WALK_SEQUENCE[step % WALK_SEQUENCE.length]);
+      const idx = WALK_SEQUENCE[step % WALK_SEQUENCE.length];
+      showFrame(`walk-${idx}`, CAT_WALK[idx]);
     },
   }));
 
-  useEffect(() => () => clearTimer(), []);
-
   return (
-    <div className="cat-frames">
-      {CAT_WALK.map((src, i) => (
-        <PictureImg
-          key={`walk-${i}`}
-          src={src}
-          ref={(el) => {
-            walkRefs.current[i] = el;
-          }}
-          className="cat-frame"
-          style={{ opacity: 0 }}
-        />
-      ))}
-      {CAT_TAIL.map((src, i) => (
-        <PictureImg
-          key={`tail-${i}`}
-          src={src}
-          ref={(el) => {
-            tailRefs.current[i] = el;
-          }}
-          className="cat-frame"
-          style={{ opacity: 0 }}
-        />
-      ))}
-    </div>
+    <picture className="cat-frames">
+      <source ref={sourceRef} type="image/webp" />
+      <img
+        ref={imgRef}
+        src={CAT_WALK[0].png}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className="cat-frame"
+        style={{ visibility: "hidden" }}
+      />
+    </picture>
   );
 });
 

@@ -213,19 +213,17 @@
 }
 
 .cat-frames {
+  display: block;
   position: relative;
   width: 100%;
   aspect-ratio: 1440 / 900;
 }
 
 .cat-frame {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0;
-  transition: opacity 90ms linear;
 }
 
 .particle-layer {
@@ -330,6 +328,13 @@
   font-size: clamp(0.85rem, 1.3vw, 1.15rem);
   color: var(--c-mist);
   letter-spacing: 0.18em;
+}
+
+/* CJK subtitles: Mincho faces already carry visual weight; wide Latin
+   tracking makes Traditional Chinese look sparse and broken. */
+.caption__sub.jp {
+  font-weight: 400;
+  letter-spacing: 0.06em;
 }
 
 .caption__line {
@@ -447,6 +452,149 @@
   }
 }
 
+/* ---- Stage chrome (progress / sound / links) -------------------------- */
+
+.stage-chrome {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.stage-chrome.is-visible {
+  opacity: 1;
+}
+
+.scroll-rail {
+  position: absolute;
+  /* End above the bottom-right link icons so the tip rests at the finale. */
+  top: 16vh;
+  right: 1.6vw;
+  bottom: 12vh;
+  width: 1px;
+  overflow: visible;
+}
+
+.scroll-rail__track {
+  position: absolute;
+  inset: 0;
+  background: rgba(155, 198, 199, 0.18);
+}
+
+.scroll-rail__fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--c-mist), var(--c-jade));
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.scroll-rail__fill::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c-paper);
+  box-shadow: 0 0 8px rgba(155, 198, 199, 0.55);
+  /* Tip sits on the rail end — do not spill past the track. */
+  transform: translate(-50%, 50%);
+}
+
+.chrome-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: rgba(228, 238, 238, 0.55);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.35s ease, opacity 0.35s ease;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+.stage-chrome.is-visible .chrome-icon {
+  pointer-events: auto;
+}
+
+.chrome-icon:hover,
+.chrome-icon:focus-visible {
+  color: var(--c-paper);
+  outline: none;
+}
+
+.chrome-icon--autoplay {
+  position: absolute;
+  left: 1.4vw;
+  top: 2.4vh;
+}
+
+.chrome-icon--autoplay.is-active {
+  color: var(--c-mist);
+}
+
+.chrome-icon--top {
+  position: absolute;
+  right: 1.2vw;
+  top: 2.4vh;
+}
+
+.chrome-icon--sound {
+  position: absolute;
+  left: 1.4vw;
+  bottom: 2.4vh;
+}
+
+.chrome-icon--sound.is-muted {
+  color: rgba(155, 198, 199, 0.4);
+}
+
+.chrome-links {
+  position: absolute;
+  right: 1.2vw;
+  bottom: 2.4vh;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+@media (max-width: 640px) {
+  .scroll-rail {
+    right: 10px;
+    top: 16vh;
+    bottom: 16vh;
+  }
+
+  .chrome-icon--autoplay {
+    left: 10px;
+    top: 14px;
+  }
+
+  .chrome-icon--top {
+    right: 8px;
+    top: 14px;
+  }
+
+  .chrome-icon--sound {
+    left: 10px;
+    bottom: 14px;
+  }
+
+  .chrome-links {
+    right: 8px;
+    bottom: 14px;
+  }
+}
+
 /* ---- Preloader ------------------------------------------------------- */
 
 .preloader {
@@ -552,8 +700,5 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue__line {
     animation: none;
-  }
-  .cat-frame {
-    transition: none;
   }
 }

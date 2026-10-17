@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PictureImg from "./PictureImg";
 import Cat, { CatHandle } from "./Cat";
 import Preloader from "./Preloader";
+import StageChrome from "./StageChrome";
 import "./cinematic.css";
 import { CRITICAL_PRELOAD, EFFECTS, HERO, PLANTS, SECONDARY_PRELOAD } from "@/lib/assets";
 import {
@@ -22,6 +23,8 @@ import {
   useImagePreloader,
   useIsomorphicLayoutEffect,
 } from "@/lib/hooks";
+import { acquireAmbientPlayer } from "@/lib/ambientAudio";
+import { createAutoScroll } from "@/lib/autoScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,10 +99,12 @@ export default function CinematicExperience() {
   const [criticalDone, setCriticalDone] = useState(false);
   const preload = useImagePreloader(CRITICAL_PRELOAD);
   const [dismissPreloader, setDismissPreloader] = useState(false);
+  const [autoplaying, setAutoplaying] = useState(false);
   // Particle positions use a float-precision pseudo-random spread that can
   // differ by a few ULPs between the server and browser JS engines, so they
   // mount client-only rather than risk a hydration mismatch.
   const [mounted, setMounted] = useState(false);
+  const autoScrollRef = useRef<ReturnType<typeof createAutoScroll> | null>(null);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -134,6 +139,7 @@ export default function CinematicExperience() {
 
   const captionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const scrollCueRef = useRef<HTMLDivElement | null>(null);
+  const progressFillRef = useRef<HTMLDivElement | null>(null);
 
   const leaves = useRef(seededLeaves(isMobile ? PARTICLES.fallingLeaves.mobile : PARTICLES.fallingLeaves.desktop));
   const drops = useRef(seededDrops(isMobile ? PARTICLES.waterDrops.mobile : PARTICLES.waterDrops.desktop));
@@ -158,6 +164,24 @@ export default function CinematicExperience() {
     const t = window.setTimeout(() => setDismissPreloader(true), 500);
     return () => window.clearTimeout(t);
   }, [criticalDone]);
+
+  // Ambient loop: once the scene is entered, wait 500ms then settle at 25%.
+  // Uses a module singleton so React Strict Mode remounts cannot kill playback.
+  useIsomorphicLayoutEffect(() => {
+    if (!dismissPreloader) return;
+    const player = acquireAmbientPlayer();
+    player.startOnEnter();
+    return () => player.release();
+  }, [dismissPreloader]);
+
+  useEffect(() => {
+    const auto = createAutoScroll({ onChange: setAutoplaying });
+    autoScrollRef.current = auto;
+    return () => {
+      auto.dispose();
+      autoScrollRef.current = null;
+    };
+  }, []);
 
   useIsomorphicLayoutEffect(() => {
     if (!criticalDone) return;
@@ -313,22 +337,26 @@ export default function CinematicExperience() {
       });
 
       const cap = (id: string) => captionRefs.current[id];
-      const revealCaption = (id: string, start: number, end: number) => {
+      const revealCaption = (id: string, start: number, end: number, opts?: { hold?: boolean }) => {
         const el = cap(id);
         if (!el) return;
-        const holdEnd = end - (end - start) * 0.35;
-        const fadeStart = holdEnd;
+        const span = end - start;
+        const revealDur = opts?.hold ? span * 0.45 : span * 0.5;
         master.fromTo(
           el,
           { clipPath: "inset(0 100% 0 0)", opacity: 0, filter: "blur(6px)" },
-          { clipPath: "inset(0 0% 0 0)", opacity: 1, filter: "blur(0px)", duration: pos(end - start) * 0.5, ease: "power2.out" },
+          { clipPath: "inset(0 0% 0 0)", opacity: 1, filter: "blur(0px)", duration: pos(revealDur), ease: "power2.out" },
           pos(start)
         );
-        master.to(
-          el,
-          { opacity: 0, filter: "blur(4px)", duration: pos(end - fadeStart) },
-          pos(fadeStart)
-        );
+        // Final scene stays; earlier scenes dissolve before the next one arrives.
+        if (!opts?.hold) {
+          const fadeStart = end - span * 0.35;
+          master.to(
+            el,
+            { opacity: 0, filter: "blur(4px)", duration: pos(end - fadeStart) },
+            pos(fadeStart)
+          );
+        }
       };
 
       // Scroll cue fades almost immediately once the journey begins.
@@ -415,13 +443,17 @@ export default function CinematicExperience() {
         pos(aonagiS)
       );
       if (finaleDimRef.current) {
+        // Spans almost the entire scene so it reads as a slow settle, not a
+        // discrete "lights out" cut, and stays gentle enough that it adds
+        // to — rather than fights — the already-present vignette.
         master.to(
           finaleDimRef.current,
-          { opacity: 0.55, duration: pos(aonagiE - aonagiS) * 0.5 },
-          pos(aonagiS + (aonagiE - aonagiS) * 0.3)
+          { opacity: 0.3, duration: pos(aonagiE - aonagiS) * 0.85, ease: "sine.in" },
+          pos(aonagiS + (aonagiE - aonagiS) * 0.1)
         );
       }
-      revealCaption("aonagi", aonagiS + (aonagiE - aonagiS) * 0.35, aonagiE);
+      // Hold through progress=1 — SCENE 07 is the journey's end, not a fade-out.
+      revealCaption("aonagi", aonagiS + (aonagiE - aonagiS) * 0.12, aonagiE, { hold: true });
 
       // ---- Cat state machine ---------------------------------------------
       // Scroll position only decides WHICH zone we're in (and therefore the
@@ -454,6 +486,10 @@ export default function CinematicExperience() {
       }
 
       function handleFrame(p: number) {
+        if (progressFillRef.current) {
+          progressFillRef.current.style.transform = `scaleY(${p})`;
+        }
+
         if (p < catS) {
           zone = "before";
           targetX = CAT.entryXPercent;
@@ -558,6 +594,16 @@ export default function CinematicExperience() {
   return (
     <>
       <Preloader progress={preload.total === 0 ? 1 : preload.loaded / preload.total} visible={!dismissPreloader} />
+      <StageChrome
+        visible={dismissPreloader}
+        progressFillRef={progressFillRef}
+        autoplaying={autoplaying}
+        onToggleAutoplay={() => autoScrollRef.current?.toggle()}
+        onBackToTop={() => {
+          autoScrollRef.current?.stop();
+          window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+        }}
+      />
 
       <main className={`stage-root ${criticalDone ? "is-ready" : ""}`} ref={rootRef}>
         <div className="scroll-track" ref={trackRef}>
@@ -653,13 +699,23 @@ export default function CinematicExperience() {
                   <h2 className="caption__title">
                     <span className="jp">{scene.title}</span>
                   </h2>
-                  {scene.titleSub && <p className="caption__sub en">{scene.titleSub}</p>}
+                  {scene.titleSub && (
+                    <p
+                      className={`caption__sub ${scene.titleSubLang === "en" ? "en" : "jp"}`}
+                      lang={scene.titleSubLang}
+                    >
+                      {scene.titleSub}
+                    </p>
+                  )}
                   {scene.line1 && <p className="caption__line jp">{scene.line1}</p>}
                   {scene.id === "aonagi" && scene.line2 && (
                     <button
                       type="button"
                       className="caption__cta jp"
-                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                      onClick={() => {
+                        autoScrollRef.current?.stop();
+                        window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+                      }}
                     >
                       {scene.line2}
                     </button>

@@ -7,7 +7,10 @@
   --c-mist: #9bc6c7;
   --c-paper: #e4eeee;
 
-  --font-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  /* Shippori for Japanese; Noto Serif TC covers Traditional Chinese glyphs
+     (and TC-only forms like 靜) that the JP face does not provide. */
+  --font-jp: "Shippori Mincho", "Noto Serif TC", "Hiragino Mincho ProN", "Yu Mincho",
+    "Songti TC", "PMingLiU", "PingFang TC", serif;
   --font-en: "Jost", "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -21,7 +24,18 @@ body {
   margin: 0;
   background: var(--c-deepest);
   color: var(--c-paper);
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
+  /* Keep native scroll for ScrollTrigger, but hide the scrollbar so the
+     stage reads as a pinned GSAP scene rather than a document. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 body {

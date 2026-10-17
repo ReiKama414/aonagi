@@ -1,6 +1,8 @@
 /** Module-level ambient BGM — survives React Strict Mode remounts. */
 
-export const BGM_SRC = "/audio/bgm_moonlit_water.mp3";
+import { withBase } from "./paths";
+
+export const BGM_SRC = withBase("/audio/bgm_moonlit_water.mp3");
 export const BGM_TARGET_VOLUME = 0.25;
 export const BGM_ENTER_DELAY_MS = 500;
 

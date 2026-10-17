@@ -10,7 +10,7 @@ import { GITHUB_URL, SITE_URL } from "@/lib/site";
 
 interface StageChromeProps {
   visible: boolean;
-  progressFillRef: RefObject<HTMLDivElement | null>;
+  progressFillRef: RefObject<HTMLDivElement>;
   autoplaying: boolean;
   onToggleAutoplay: () => void;
   onBackToTop: () => void;

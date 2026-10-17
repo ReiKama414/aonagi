@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { withBase } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "AONAGI 青凪",
   description: "静けさは、まだ生きている — 幽靜藍綠竹林、月夜水庭與小黑貓的沉浸式視覺故事。",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { url: withBase("/favicon.ico"), sizes: "any" },
+      { url: withBase("/favicon.png"), type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    apple: [{ url: withBase("/apple-touch-icon.png"), sizes: "180x180" }],
   },
 };
 

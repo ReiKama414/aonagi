@@ -2,8 +2,10 @@
 // in /aonagi-assets for editing and are not shipped to the browser except as
 // the <picture> fallback for browsers without WebP support.
 
-const webp = (path: string) => `/assets/webp/${path}`;
-const png = (path: string) => `/assets/${path}`;
+import { withBase } from "./paths";
+
+const webp = (path: string) => withBase(`/assets/webp/${path}`);
+const png = (path: string) => withBase(`/assets/${path}`);
 
 export const HERO = {
   forestSky: { webp: webp("hero/forest-sky.webp"), png: png("hero/forest-sky.png") },
